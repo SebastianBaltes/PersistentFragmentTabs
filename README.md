@@ -1,7 +1,7 @@
 PersistentFragmentTabs
 ======================
 
-This is a small framework for navigation tabs and fragment switching and handling of up and back navigation.
+This is a simple and small framework for navigation tabs and fragment switching and handling of up and back navigation.
 Each tab has its own stack of fragments. 
 It uses [ActionBarSherlock](http://actionbarsherlock.com/) and is compatible back to API level 8.
 
@@ -16,8 +16,60 @@ the same user experience for tab and up navigation should be implemented.
 How it works from a users point of view
 ---------------------------------------
 
+Coming from an iPhone world, it works like a TabBarController containing some NavigationController on each tab.
+
+But best it's explained by example: The demo application shows three tabs. The first two tabs are list views, the third just a text.
+A click to a list item opens the detail view on the same tab. The up button is shown in this case and navigates back to the list view, 
+independent for each tab. If a tab with a list view is shown, then no up button is shown because there is no parent view,
+the list view is the master. If a tab with a list item (detail view) is shown, then the up button is shown because 
+there exists a parent view. Any number of fragments can be stacked for each tab, not just two.
+
+Switching between tabs and/or using the back button works without breaking this logik. 
+
 How to use
 ----------
+
+All tabs and all fragments are shown on one single activity that needs to extend AbstractTabStackNavigationActivity. 
+There you need to implement the method createTabs and call addTab:
+
+```java
+/**
+ * Demo activity that shows three simple tabs and ancestral and temporal navigation support  
+ * @author sbaltes
+ */
+public class MainActivity extends AbstractTabStackNavigationActivity {
+
+  /**
+   * overriden call back method where the tabs are created 
+   */
+  @Override
+  protected void createTabs() {
+
+    // add a first tab: A clickable list of star trek characters 
+    addTab(
+        "Classic Tab",
+        new DemoListFragment().setCharacters(new String[] { "James T. Kirk", "Spock", "Leonard 'Bones' McCoy", "Montgomery 'Scotty' Scott",
+            "Hikaru Sulu", "Nyota Uhura", "Pavel Chekov", "Christine Chapel", "Janice Rand", }));
+
+    // add a second tab: A clickable list of star trek characters 
+    addTab(
+        "Next Gen. Tab",
+        new DemoListFragment().setCharacters(new String[] { "Jean-Luc Picard", "William Thomas 'Will' Riker", "Data", "Geordi La Forge",
+            "Worf", "Doctor Beverly Crusher", "Doctor Katherine Pulaski", "Deanna Troi", "Natasha 'Tasha' Yar", "Wesley Crusher", }));
+
+    // add a third tab 
+    addTab("Hello Tab", new DemoStringFragment().setText("Hello on Tab 3"));
+  }
+
+  public void addTab(String title, Fragment fragment) {
+    ActionBar.Tab tab = getSupportActionBar().newTab();
+    tab.setText(title);
+    addTab(tab, fragment);
+  }
+
+}
+```
+
 
 
 How it works interally
@@ -52,14 +104,6 @@ It has one dependency to ActionBarSherlock that must be present in the workspace
 The project can be run as an android android application. The project is intended to be copied, 
 so you should copy the package de.objectccode.persistentfragmenttabs.tabsframework into your own project or use the 
 demo project as a starting point.
-
-
-Demo
-----
-
-The demo application shows three tabs. The first two tabs are list views, the third just a text.
-A click to a list item opens the detail view on the same tab. The up button is shown in this case and navigates back to the list view, 
-indipendent for each tab.
 
 
 LICENSE
