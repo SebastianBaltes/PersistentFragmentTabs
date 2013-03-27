@@ -1,7 +1,7 @@
 PersistentFragmentTabs
 ======================
 
-This is a simple and small framework for navigation tabs and fragment switching and handling of up and back navigation.
+For Android Development. This is a simple and small framework for navigation tabs and fragment switching and handling of up and back navigation.
 Each tab has its own stack of fragments. 
 It uses [ActionBarSherlock](http://actionbarsherlock.com/) and is compatible back to API level 8.
 
