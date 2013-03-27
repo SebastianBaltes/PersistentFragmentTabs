@@ -19,8 +19,15 @@ How it works from a users point of view
 Coming from an iPhone world, it works like a TabBarController containing some NavigationController on each tab.
 
 But best it's explained by example: The demo application shows three tabs. The first two tabs are list views, the third just a text.
+
+![Master View](/tab_master.png?raw=true)
+
 A click to a list item opens the detail view on the same tab. The up button is shown in this case and navigates back to the list view, 
-independent for each tab. If a tab with a list view is shown, then no up button is shown because there is no parent view,
+independent for each tab. 
+
+![Detail View](/tab_detail.png?raw=true)
+
+If a tab with a list view is shown, then no up button is shown because there is no parent view,
 the list view is the master. If a tab with a list item (detail view) is shown, then the up button is shown because 
 there exists a parent view. Any number of fragments can be stacked for each tab, not just two.
 
