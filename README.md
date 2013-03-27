@@ -131,8 +131,8 @@ You may wonder why pushFragment needs the current tab as the first parameter and
 The reasons are async use cases, for example where a click on a button leads to a json request that takes some seconds. 
 During this time the user could switch the tabs.
 
-How it works interally
-----------------------
+How it works internally
+-----------------------
 
 The framework consists of 6 classes located in the package de.objectccode.persistentfragmenttabs.tabsframework, 
 mainly an abstract activity base class (AbstractTabStackNavigationActivity) that must be extended and a wrapper object 
