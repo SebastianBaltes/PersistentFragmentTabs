@@ -10,7 +10,7 @@ Background
 ----------
 
 The official android documentation provides an example for [navigation tabs with fragments](http://developer.android.com/guide/topics/ui/actionbar.html#Tabs),
-but shows not much about up and back navigation. The need for it occured during a port of an iPhone app to android where 
+but does not provide much information about up and back navigation. The need for it occured during a port of an iPhone app to android where 
 the same user experience for tab and up navigation should be implemented.
 
 For more background, see this [Stackoverflow](http://stackoverflow.com/questions/6987334/separate-back-stack-for-each-tab-in-android-using-fragments) question.
@@ -20,7 +20,7 @@ How it works from a users point of view
 
 Coming from an iPhone world, it works like a TabBarController containing some NavigationController on each tab.
 
-But best it's explained by example: The demo application shows three tabs. The first two tabs are list views, the third just a text.
+But it's best explained by example: The demo application shows three tabs. The first two tabs are list views, the third just a text.
 
 ![Master View](/tab_master.png?raw=true)
 
