@@ -32,6 +32,12 @@ public abstract class AbstractTabStackNavigationActivity extends SherlockFragmen
   public static final String LOGTAG = AbstractTabStackNavigationActivity.class.getSimpleName();
 
   /**
+   * Custom back button stack. It contains of two possible actions: change of
+   * tab and push of new fragments
+   */
+  private final Stack<BackButtonAction> backButtonActions = new Stack<BackButtonAction>();
+
+  /**
    * Flag that disables change of the back stack. This is needed during back
    * stack operations like SwitchTabBackAction.
    */
@@ -42,12 +48,6 @@ public abstract class AbstractTabStackNavigationActivity extends SherlockFragmen
    * distinguish between add and attach
    */
   WeakHashMap<Fragment, Boolean> fragmentWasAdded = new WeakHashMap<Fragment, Boolean>();
-
-  /**
-   * Custom back button stack. It contains of two possible actions: change of
-   * tab and push of new fragments
-   */
-  private final Stack<BackButtonAction> backButtonActions = new Stack<BackButtonAction>();
 
   /**
    * Maps the tab index to the tab info object
@@ -197,18 +197,6 @@ public abstract class AbstractTabStackNavigationActivity extends SherlockFragmen
   }
 
   /**
-   * Replace the current fragment with the new fragment. Replacement of fragments does not push anything on the back stack.
-   * 
-   * @param tabInfo
-   *          tabinfo where the fragment should be pushed
-   * @param fragment
-   *          the fragment to show
-   */
-  public void replaceFragment(final TabInfo tabInfo, final Fragment fragment) {
-    pushOrReplaceFragment(tabInfo, fragment, true, true);
-  }
-
-  /**
    * pushs a new fragment onto the tabs back stack and shows the new fragment
    * 
    * @param tabInfo
@@ -258,6 +246,19 @@ public abstract class AbstractTabStackNavigationActivity extends SherlockFragmen
       }
     }
     setUpButtonDependingStack();
+  }
+
+  /**
+   * Replace the current fragment with the new fragment. Replacement of
+   * fragments does not push anything on the back stack.
+   * 
+   * @param tabInfo
+   *          tabinfo where the fragment should be pushed
+   * @param fragment
+   *          the fragment to show
+   */
+  public void replaceFragment(final TabInfo tabInfo, final Fragment fragment) {
+    pushOrReplaceFragment(tabInfo, fragment, true, true);
   }
 
   protected void setUpButtonDependingStack() {

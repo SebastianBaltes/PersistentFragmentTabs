@@ -9,7 +9,8 @@ import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 
 /**
- * Shows just a simple text 
+ * Shows just a simple text
+ * 
  * @author sbaltes
  */
 public class DemoStringFragment extends SherlockFragment {
@@ -17,16 +18,16 @@ public class DemoStringFragment extends SherlockFragment {
   private String title;
 
   @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    View v = inflater.inflate(R.layout.hello_world, container, false);
-    View tv = v.findViewById(R.id.text);
+  public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+    final View v = inflater.inflate(R.layout.hello_world, container, false);
+    final View tv = v.findViewById(R.id.text);
     ((TextView) tv).setText(title);
     return v;
   }
 
-  public DemoStringFragment setText(String title_) {
-    this.title = title_;
+  public DemoStringFragment setText(final String title_) {
+    title = title_;
     return this;
   }
-  
+
 }

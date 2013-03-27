@@ -12,24 +12,27 @@ import com.actionbarsherlock.app.ActionBar.Tab;
 import de.objectccode.persistentfragmenttabs.R;
 
 /**
- * Used to identify a tab. Stores internal infos about a tab like the fragment stack, the tab object, the tab index (tag) and a reference to the tab activity. 
+ * Used to identify a tab. Stores internal infos about a tab like the fragment
+ * stack, the tab object, the tab index (tag) and a reference to the tab
+ * activity.
+ * 
  * @author sbaltes
  */
 public class TabInfo implements ActionBar.TabListener {
 
   Stack<Fragment> stack = new Stack<Fragment>();
   Tab tab;
-  Integer tag;
   private final AbstractTabStackNavigationActivity tabStackNavigation;
+  Integer tag;
 
   /**
    * @param tabStackNavigation
    */
-  public TabInfo(final AbstractTabStackNavigationActivity tabStackNavigation) {
+  TabInfo(final AbstractTabStackNavigationActivity tabStackNavigation) {
     this.tabStackNavigation = tabStackNavigation;
   }
 
-  public void attachFragment(final FragmentTransaction transaction, final Fragment fragment) {
+  void attachFragment(final FragmentTransaction transaction, final Fragment fragment) {
     if (tabStackNavigation.fragmentWasAdded.containsKey(fragment)) {
       Log.d(AbstractTabStackNavigationActivity.LOGTAG, "attachFragment(" + fragment + ")");
       transaction.attach(fragment);
@@ -41,7 +44,7 @@ public class TabInfo implements ActionBar.TabListener {
     tabStackNavigation.setUpButtonDependingStack();
   }
 
-  public void detachFragment(final FragmentTransaction transaction, final Fragment fragment) {
+  void detachFragment(final FragmentTransaction transaction, final Fragment fragment) {
     if (!fragment.isDetached()) {
       Log.d(AbstractTabStackNavigationActivity.LOGTAG, "detach(" + fragment + ")");
       transaction.detach(fragment);
