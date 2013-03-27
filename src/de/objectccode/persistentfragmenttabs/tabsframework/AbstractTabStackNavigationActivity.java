@@ -21,7 +21,10 @@ import com.actionbarsherlock.view.Window;
 import de.objectccode.persistentfragmenttabs.R;
 
 /**
- * Main activity for tab fragment. Each tab has its own stack of content fragments. Up and back button are handled automatically by an custom back stack. 
+ * Main activity for tab fragment. Each tab has its own stack of content
+ * fragments. Up and back button are handled automatically by an custom back
+ * stack.
+ * 
  * @author sbaltes
  */
 public abstract class AbstractTabStackNavigationActivity extends SherlockFragmentActivity {
@@ -29,20 +32,23 @@ public abstract class AbstractTabStackNavigationActivity extends SherlockFragmen
   public static final String LOGTAG = AbstractTabStackNavigationActivity.class.getSimpleName();
 
   /**
-   * Flag that disables change of the back stack. This is needed during back stack operations like SwitchTabBackAction.
+   * Flag that disables change of the back stack. This is needed during back
+   * stack operations like SwitchTabBackAction.
    */
   boolean changeOfStackAllowedForTabListener = true;
-  
+
   /**
-   * Set of all fragments that were added once to this activity in order to distinguish between add and attach
+   * Set of all fragments that were added once to this activity in order to
+   * distinguish between add and attach
    */
   WeakHashMap<Fragment, Boolean> fragmentWasAdded = new WeakHashMap<Fragment, Boolean>();
-  
+
   /**
-   * Custom back button stack. It contains of two possible actions: change of tab and push of new fragments 
+   * Custom back button stack. It contains of two possible actions: change of
+   * tab and push of new fragments
    */
   private final Stack<BackButtonAction> backButtonActions = new Stack<BackButtonAction>();
-  
+
   /**
    * Maps the tab index to the tab info object
    */
@@ -51,6 +57,7 @@ public abstract class AbstractTabStackNavigationActivity extends SherlockFragmen
 
   /**
    * add a tab and the tab content. Call it in createTabs.
+   * 
    * @param tab
    * @param fragment
    */
@@ -67,12 +74,13 @@ public abstract class AbstractTabStackNavigationActivity extends SherlockFragmen
   }
 
   /**
-   * Callback method (part of onCreate) for adding all tabs with addTab 
+   * Callback method (part of onCreate) for adding all tabs with addTab
    */
   protected abstract void createTabs();
 
   /**
    * Gets the tab info object of the currently selected tab
+   * 
    * @return TabInfo
    */
   public TabInfo getCurrentTabInfo() {
@@ -128,7 +136,8 @@ public abstract class AbstractTabStackNavigationActivity extends SherlockFragmen
         final int currentIndex = getSupportActionBar().getSelectedNavigationIndex();
         final BackButtonAction action;
         if (backButtonActions.isEmpty()) {
-          // this case can happen when a popAction was removed because it was found on the wrong tab index (see below)
+          // this case can happen when a popAction was removed because it was
+          // found on the wrong tab index (see below)
           action = new PopTabStackBackAction(this, currentIndex);
         } else {
           action = backButtonActions.pop();
@@ -136,15 +145,15 @@ public abstract class AbstractTabStackNavigationActivity extends SherlockFragmen
         if (action instanceof PopTabStackBackAction) {
           final PopTabStackBackAction popAction = (PopTabStackBackAction) action;
           if (popAction.index == currentIndex) {
-            Log.d(LOGTAG, "found popAction on currentIndex, execute: "+popAction);
+            Log.d(LOGTAG, "found popAction on currentIndex, execute: " + popAction);
             action.back();
             // Log.d(LOGTAG, "backButtonActions: "+backButtonActions);
             break;
           } else {
-            Log.d(LOGTAG, "found popAction on wrong tab index, remove it: "+popAction);
+            Log.d(LOGTAG, "found popAction on wrong tab index, remove it: " + popAction);
           }
         } else {
-          Log.d(LOGTAG, "remove action from stack: "+action);
+          Log.d(LOGTAG, "remove action from stack: " + action);
         }
       } while (true);
     }
@@ -152,7 +161,8 @@ public abstract class AbstractTabStackNavigationActivity extends SherlockFragmen
   }
 
   /**
-   * pop the current fragment from the tabs back stack and show the previous fragment  
+   * pop the current fragment from the tabs back stack and show the previous
+   * fragment
    */
   public void popFragment() {
     Log.d(LOGTAG, "popFragment()");
@@ -175,12 +185,47 @@ public abstract class AbstractTabStackNavigationActivity extends SherlockFragmen
   }
 
   /**
-   * pushs a new fragment onto the tabs back stack and shows the new fragment
-   * @param tabInfo tabinfo where the fragment should be pushed
-   * @param fragment the fragment to show
-   * @param pushEvenIfSameClassAsTopFragment if false, the fragment is pushed only if it is of a different class than the currently shown fragment of that tab - instead it replaces the current fragment. If true, then the fragment is pushed in any case. 
+   * Pushes a new fragment onto the tabs back stack and shows the new fragment
+   * 
+   * @param tabInfo
+   *          tabinfo where the fragment should be pushed
+   * @param fragment
+   *          the fragment to show
    */
-  public void pushFragment(final TabInfo tabInfo, final Fragment fragment, final boolean pushEvenIfSameClassAsTopFragment) {
+  public void pushFragment(final TabInfo tabInfo, final Fragment fragment) {
+    pushOrReplaceFragment(tabInfo, fragment, false, true);
+  }
+
+  /**
+   * Replace the current fragment with the new fragment. Replacement of fragments does not push anything on the back stack.
+   * 
+   * @param tabInfo
+   *          tabinfo where the fragment should be pushed
+   * @param fragment
+   *          the fragment to show
+   */
+  public void replaceFragment(final TabInfo tabInfo, final Fragment fragment) {
+    pushOrReplaceFragment(tabInfo, fragment, true, true);
+  }
+
+  /**
+   * pushs a new fragment onto the tabs back stack and shows the new fragment
+   * 
+   * @param tabInfo
+   *          tabinfo where the fragment should be pushed
+   * @param fragment
+   *          the fragment to show
+   * @param replaceInsteadOfPush
+   *          if true, the current fragment is replaced instead of pushed.
+   *          Replacement of fragments does not push anything on the back stack.
+   * @param pushEvenIfSameClassAsTopFragment
+   *          if false, the fragment is pushed only if it is of a different
+   *          class than the currently shown fragment of that tab - instead it
+   *          replaces the current fragment. If true, then the fragment is
+   *          pushed in any case.
+   */
+  public void pushOrReplaceFragment(final TabInfo tabInfo, final Fragment fragment, final boolean replaceInsteadOfPush,
+      final boolean pushEvenIfSameClassAsTopFragment) {
     Log.d(LOGTAG, "pushFragment(" + fragment + ")");
     final boolean onWrongTab = getCurrentTabInfo() != tabInfo;
     if (onWrongTab) {
@@ -188,7 +233,8 @@ public abstract class AbstractTabStackNavigationActivity extends SherlockFragmen
     }
     final boolean newFragmentIsOfSameClassAsOldFragment = tabInfo.stack.size() > 0
         && tabInfo.stack.peek().getClass().equals(fragment.getClass());
-    final boolean justReplacePreviousFragment = newFragmentIsOfSameClassAsOldFragment && !pushEvenIfSameClassAsTopFragment;
+    final boolean justReplacePreviousFragment = replaceInsteadOfPush
+        || (newFragmentIsOfSameClassAsOldFragment && !pushEvenIfSameClassAsTopFragment);
     final FragmentManager fragmentManager = getSupportFragmentManager();
     final FragmentTransaction ft = fragmentManager.beginTransaction();
     tabInfo.detachFragment(ft, tabInfo.stack.peek());

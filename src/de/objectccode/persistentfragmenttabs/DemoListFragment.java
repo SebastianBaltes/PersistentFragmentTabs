@@ -38,10 +38,14 @@ public class DemoListFragment extends SherlockListFragment {
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
     super.onListItemClick(l, v, position, id);
+    
+    // first, you need to get the reference to the currently shown tab in order to add the fragment onto this tab
     final TabInfo tab = getTabStack().getCurrentTabInfo();
     DemoStringFragment fragment = new DemoStringFragment();
     fragment.setText(characters[position]);
-    getTabStack().pushFragment(tab, fragment, false);
+    
+    // second, you push the fragment. It becomes visible and the up button is shown
+    getTabStack().pushFragment(tab, fragment);
   
   }
 
