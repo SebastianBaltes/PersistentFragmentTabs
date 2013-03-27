@@ -127,6 +127,10 @@ public class DemoListFragment extends SherlockListFragment {
 }
 ```
 
+You may wonder why pushFragment needs the current tab as the first parameter and does not discover this itself. 
+The reasons are async use cases, for example where a click on a button leads to a json request that takes some seconds. 
+During this time the user could switch the tabs.
+
 How it works interally
 ----------------------
 
@@ -135,10 +139,10 @@ mainly an abstract activity base class (AbstractTabStackNavigationActivity) that
 for the tab information (TabInfo).
 
 The base activity AbstractTabStackNavigationActivity is derived from SherlockFragmentActivity and encapsulates 
-most details. It has one abstract method createTabs that is a callback method that need to be implemented in the subclass 
-and is used to add the tabs with the method addTab.
+most details. It has one abstract callback method createTabs that needs to be implemented in the subclass. 
+There you call addTab.
 
-The TabInfo class is an internal class and should mainly used as a reference. It stores internal infos about a tab like the fragment stack, 
+The TabInfo class is an internal class and should be considered private, but you need to pass references around. It stores internal infos about a tab like the fragment stack, 
 the tab object, the tab index (tag) and a reference to the tab activity. 
 
 AbstractTabStackNavigationActivity holds a WeakHashMap of all Fragments that have been added to distinguish between fragment add and 
