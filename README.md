@@ -154,7 +154,7 @@ Installation
 
 Demo and framework are included in one android eclipse project.
 It has one dependency to ActionBarSherlock that must be present in the workspace as a library project. 
-The project can be run as an android android application. The project is intended to be copied, 
+The project can be run as an android application. The project is intended to be copied, 
 so you should copy the package de.objectccode.persistentfragmenttabs.tabsframework into your own project or use the 
 demo project as a starting point.
 
