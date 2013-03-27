@@ -48,14 +48,14 @@ public class MainActivity extends AbstractTabStackNavigationActivity {
     // add a first tab: A clickable list of star trek characters 
     addTab(
         "Classic Tab",
-        new DemoListFragment().setCharacters(new String[] { "James T. Kirk", "Spock", "Leonard 'Bones' McCoy", "Montgomery 'Scotty' Scott",
-            "Hikaru Sulu", "Nyota Uhura", "Pavel Chekov", "Christine Chapel", "Janice Rand", }));
+        new DemoListFragment().setCharacters(
+            new String[] { "James T. Kirk", "Spock", "Leonard 'Bones' McCoy", }));
 
     // add a second tab: A clickable list of star trek characters 
     addTab(
         "Next Gen. Tab",
-        new DemoListFragment().setCharacters(new String[] { "Jean-Luc Picard", "William Thomas 'Will' Riker", "Data", "Geordi La Forge",
-            "Worf", "Doctor Beverly Crusher", "Doctor Katherine Pulaski", "Deanna Troi", "Natasha 'Tasha' Yar", "Wesley Crusher", }));
+        new DemoListFragment().setCharacters(
+            new String[] { "Jean-Luc Picard", "William Thomas 'Will' Riker", "Data", }));
 
     // add a third tab 
     addTab("Hello Tab", new DemoStringFragment().setText("Hello on Tab 3"));
@@ -70,7 +70,53 @@ public class MainActivity extends AbstractTabStackNavigationActivity {
 }
 ```
 
+The following example shows how to push a fragment, to show a detail view if an item is clicked:
 
+```java
+/**
+ * Simple list fragment that demonstrates ancestral navigation 
+ * @author sbaltes
+ */
+public class DemoListFragment extends SherlockListFragment {
+
+  private String[] characters;
+
+  public DemoListFragment() {
+  }
+  
+  public DemoListFragment setCharacters(String[] characters_) {
+    this.characters = characters_;
+    return this;
+  }
+  
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    ArrayAdapter<String> adapter = new ArrayAdapter<String>(inflater.getContext(), android.R.layout.simple_list_item_1, characters);
+    setListAdapter(adapter);
+    return super.onCreateView(inflater, container, savedInstanceState);
+  }
+
+  @Override
+  public void onListItemClick(ListView l, View v, int position, long id) {
+    super.onListItemClick(l, v, position, id);
+    
+    // first, you need to get the reference to the currently shown tab in order to add the fragment onto this tab
+    final TabInfo tab = getTabStack().getCurrentTabInfo();
+    
+    DemoStringFragment fragment = new DemoStringFragment();
+    fragment.setText(characters[position]);
+    
+    // second, you push the fragment. It becomes visible and the up button is shown
+    getTabStack().pushFragment(tab, fragment);
+  
+  }
+
+  public AbstractTabStackNavigationActivity getTabStack() {
+    return (AbstractTabStackNavigationActivity)getActivity();
+  }
+
+}
+```
 
 How it works interally
 ----------------------
