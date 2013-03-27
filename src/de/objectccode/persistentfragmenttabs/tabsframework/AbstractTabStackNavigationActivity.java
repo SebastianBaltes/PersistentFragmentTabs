@@ -122,21 +122,29 @@ public abstract class AbstractTabStackNavigationActivity extends SherlockFragmen
 
   @Override
   public boolean onOptionsItemSelected(final MenuItem item) {
-    Log.d(LOGTAG, "onOptionsItemSelected");
     if (item.getItemId() == android.R.id.home) {
+      Log.d(LOGTAG, "upButton selected, going back on stack to last PopTabStackBackAction");
       do {
-        if (backButtonActions.isEmpty()) {
-          throw new RuntimeException("UpButton was clicked, but backButtonActions is empty");
-        }
-        final BackButtonAction action = backButtonActions.pop();
         final int currentIndex = getSupportActionBar().getSelectedNavigationIndex();
+        final BackButtonAction action;
+        if (backButtonActions.isEmpty()) {
+          // this case can happen when a popAction was removed because it was found on the wrong tab index (see below)
+          action = new PopTabStackBackAction(this, currentIndex);
+        } else {
+          action = backButtonActions.pop();
+        }
         if (action instanceof PopTabStackBackAction) {
           final PopTabStackBackAction popAction = (PopTabStackBackAction) action;
           if (popAction.index == currentIndex) {
+            Log.d(LOGTAG, "found popAction on currentIndex, execute: "+popAction);
             action.back();
             // Log.d(LOGTAG, "backButtonActions: "+backButtonActions);
             break;
+          } else {
+            Log.d(LOGTAG, "found popAction on wrong tab index, remove it: "+popAction);
           }
+        } else {
+          Log.d(LOGTAG, "remove action from stack: "+action);
         }
       } while (true);
     }
@@ -209,6 +217,7 @@ public abstract class AbstractTabStackNavigationActivity extends SherlockFragmen
   protected void setUpButtonDependingStack() {
     final boolean upButtonEnabled = getCurrentTabInfo().stack.size() > 1;
     Log.d(LOGTAG, "setUpButton(" + upButtonEnabled + ")");
+    Log.d(LOGTAG, "backButtonActions: " + backButtonActions);
     getSupportActionBar().setDisplayHomeAsUpEnabled(upButtonEnabled);
     getSupportActionBar().setHomeButtonEnabled(upButtonEnabled);
   }
