@@ -13,6 +13,8 @@ The official android documentation provides an example for [navigation tabs with
 but shows not much about up and back navigation. The need for it occured during a port of an iPhone app to android where 
 the same user experience for tab and up navigation should be implemented.
 
+For more background, see this [Stackoverflow](http://stackoverflow.com/questions/6987334/separate-back-stack-for-each-tab-in-android-using-fragments) question.
+
 How it works from a users point of view
 ---------------------------------------
 
